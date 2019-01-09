@@ -25,23 +25,20 @@
 		"snippets"
 	],
 	"activationEvents": [
-		"onLanguage:txt"
+		"onLanguage:*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
 			{
-				"id": "txt",
-				"aliases": ["txt", "text", "Text"],
-				"extensions": [
-					".txt"					
-				],
+				"id": "all",
+				"filenamePatterns": ["*.*"],
 				"configuration": "./syntax.json"
 			}
 		],		
 		"snippets":[
 			{
-				"language": "txt",
+				"language": "all",
 				"path": "./symbols.json"
 			}
 		],

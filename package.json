@@ -25,7 +25,8 @@
 		"snippets"
 	],
 	"activationEvents": [
-		"onLanguage:*"
+		"onLanguage:*",
+		"onCommand:unicode-math-vscode.run"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -42,9 +43,17 @@
 				"path": "./symbols.json"
 			}
 		],
+		"commands": [
+			{
+				"command": "unicode-math-vscode.run",
+				"title": "Run Unicode Math Parser",
+				"when": "editorTextFocus && !editorReadonly",
+				"category": "Unicode Math"
+			}
+		],
 		"keybindings": [
 			{
-				"command": "",
+				"command": "unicode-math-vscode.run",
 				"key": "ctrl+tab",
 				"mac": "cmd+tab",
 				"when": "editorTextFocus"

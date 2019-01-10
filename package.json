@@ -46,17 +46,15 @@
 		"commands": [
 			{
 				"command": "unicode-math-vscode.run",
-				"title": "Run Unicode Math Parser",
-				"when": "editorTextFocus && !editorReadonly",
+				"title": "Run Unicode Math Line Parser",
 				"category": "Unicode Math"
 			}
 		],
 		"keybindings": [
 			{
 				"command": "unicode-math-vscode.run",
-				"key": "ctrl+tab",
-				"mac": "cmd+tab",
-				"when": "editorTextFocus"
+				"key": "tab",
+                "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
 			}	
 		]
 	},

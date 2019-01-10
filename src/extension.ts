@@ -16,16 +16,15 @@ function processSelection(editor: vscode.TextEditor, sel: vscode.Selection) {
 	if (!sel || !document) { return; }
 	const editrange = new vscode.Range(new vscode.Position(sel.start.line, 0), sel.start);
 	const line = document.getText(editrange);	
-	const tokens = line.match(/\S+/g);
+	const tokens = line.split('\\');
 	if (tokens === null) { return; }
 	const last = tokens[tokens.length - 1];	
-	console.log('line:', line, `last: "${last}"`);
-	if (last.startsWith('\\_') || last.startsWith('\\^')) {		
+	if (last.startsWith('_') || last.startsWith('^')) {		
 		const changed = toSuperSub(last);
 		if (changed === null) { return; }
-		const newline = line.substring(0, line.lastIndexOf(last));
+		const newline = line.substring(0, line.lastIndexOf(last) - 1) + changed;
 		editor.edit(((editor: vscode.TextEditorEdit) => {
-			editor.replace(editrange, newline + changed);
+			editor.replace(editrange, newline);
 		}));
 	}
 }
@@ -138,8 +137,8 @@ const subs: {[key: string]: string} = {
 	"θ": "₀"
 };
 function toSuperSub(txt: string): string | null {
-	const mapper = txt.charAt(1) === '_' ? subs : sups;
-	const target = txt.substr(2);
+	const mapper = txt.charAt(0) === '_' ? subs : sups;
+	const target = txt.substr(1);
 	const newstr = target.split('').map((c: string) => mapper[c] || c).join('');
 	return newstr === target ? null : newstr;
 }

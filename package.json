@@ -29,17 +29,7 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"snippets":[ 
-			{"language": "markdown", "path": "./symbols.json" },
-			{"language": "json", "path": "./symbols.json" },			
-			{"language": "html", "path": "./symbols.json" },
-			{"language": "javascript", "path": "./symbols.json" },
-			{"language": "typescript", "path": "./symbols.json" },
-			{"language": "csharp", "path": "./symbols.json" },
-			{"language": "java", "path": "./symbols.json" },
-			{"language": "python", "path": "./symbols.json" },
-			{"language": "go", "path": "./symbols.json" }
-		],
+		"snippets": [{"language": "abap", "path": "./symbols.json" },{"language": "bat", "path": "./symbols.json" },{"language": "bibtex", "path": "./symbols.json" },{"language": "clojure", "path": "./symbols.json" },{"language": "coffeescript", "path": "./symbols.json" },{"language": "c", "path": "./symbols.json" },{"language": "cpp", "path": "./symbols.json" },{"language": "csharp", "path": "./symbols.json" },{"language": "css", "path": "./symbols.json" },{"language": "diff", "path": "./symbols.json" },{"language": "dockerfile", "path": "./symbols.json" },{"language": "fsharp", "path": "./symbols.json" },{"language": "git-commit", "path": "./symbols.json" },{"language": "git-rebase", "path": "./symbols.json" },{"language": "go", "path": "./symbols.json" },{"language": "groovy", "path": "./symbols.json" },{"language": "handlebars", "path": "./symbols.json" },{"language": "html", "path": "./symbols.json" },{"language": "ini", "path": "./symbols.json" },{"language": "java", "path": "./symbols.json" },{"language": "javascript", "path": "./symbols.json" },{"language": "javascriptreact", "path": "./symbols.json" },{"language": "json", "path": "./symbols.json" },{"language": "jsonc", "path": "./symbols.json" },{"language": "latex", "path": "./symbols.json" },{"language": "less", "path": "./symbols.json" },{"language": "lua", "path": "./symbols.json" },{"language": "makefile", "path": "./symbols.json" },{"language": "markdown", "path": "./symbols.json" },{"language": "objective-c", "path": "./symbols.json" },{"language": "objective-cpp", "path": "./symbols.json" },{"language": "perl", "path": "./symbols.json" },{"language": "perl6", "path": "./symbols.json" },{"language": "php", "path": "./symbols.json" },{"language": "powershell", "path": "./symbols.json" },{"language": "jade", "path": "./symbols.json" },{"language": "python", "path": "./symbols.json" },{"language": "r", "path": "./symbols.json" },{"language": "razor", "path": "./symbols.json" },{"language": "ruby", "path": "./symbols.json" },{"language": "rust", "path": "./symbols.json" },{"language": "scss", "path": "./symbols.json" },{"language": "sass", "path": "./symbols.json" },{"language": "shaderlab", "path": "./symbols.json" },{"language": "shellscript", "path": "./symbols.json" },{"language": "sql", "path": "./symbols.json" },{"language": "swift", "path": "./symbols.json" },{"language": "typescript", "path": "./symbols.json" },{"language": "typescriptreact", "path": "./symbols.json" },{"language": "tex", "path": "./symbols.json" },{"language": "vb", "path": "./symbols.json" },{"language": "xml", "path": "./symbols.json" },{"language": "xsl", "path": "./symbols.json" },{"language": "yaml", "path": "./symbols.json" }],
 		"commands": [
 			{
 				"command": "unicode-math-vscode.run",

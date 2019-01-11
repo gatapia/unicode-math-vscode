@@ -3,6 +3,8 @@ Note: This project is a limited port from the great [UnicodeMath](https://github
     sublime text plugin by [Alexandr Ruchkin](https://github.com/mvoidex). See documentation 
     there for more details.
 
+[Package Url](https://marketplace.visualstudio.com/items?itemName=GuidoTapia2.unicode-math-vscode)
+
 ## Supported Features
 
 # Symbols Snippets

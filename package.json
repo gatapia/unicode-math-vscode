@@ -1,9 +1,9 @@
-{
+{ 
 	"name": "unicode-math-vscode",
 	"displayName": "unicode-math-vscode",
-	"description": "Easy insertion of unicode math symbols",
+	"description": "Easy insertion of unicode math symbols ∑ ∀", 
 	"version": "0.0.1",	
-	"publisher": "Guido Tapia",
+	"publisher": "Guido-Tapia",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",
 	"icon": "icon.png",
@@ -25,23 +25,20 @@
 		"snippets"
 	],
 	"activationEvents": [
-		"onLanguage:*",
 		"onCommand:unicode-math-vscode.run"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"languages": [
-			{
-				"id": "all",
-				"filenamePatterns": ["*.*"],
-				"configuration": "./syntax.json"
-			}
-		],		
-		"snippets":[
-			{
-				"language": "all",
-				"path": "./symbols.json"
-			}
+		"snippets":[ 
+			{"language": "markdown", "path": "./symbols.json" },
+			{"language": "json", "path": "./symbols.json" },			
+			{"language": "html", "path": "./symbols.json" },
+			{"language": "javascript", "path": "./symbols.json" },
+			{"language": "typescript", "path": "./symbols.json" },
+			{"language": "csharp", "path": "./symbols.json" },
+			{"language": "java", "path": "./symbols.json" },
+			{"language": "python", "path": "./symbols.json" },
+			{"language": "go", "path": "./symbols.json" }
 		],
 		"commands": [
 			{

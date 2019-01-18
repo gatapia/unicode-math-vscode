@@ -1,31 +1,66 @@
-import * as vscode from 'vscode';
+import { TextDocument, Position, CancellationToken, CompletionContext, 
+	Range, CompletionItem, ExtensionContext, TextEditor, Selection, 
+	TextEditorEdit, commands, languages, window } from "vscode";
+import symbols from './symbols';
 
-export function activate(context: vscode.ExtensionContext) {
-	context.subscriptions.push(
-		vscode.commands.registerCommand('unicode-math-vscode.run', run));
+export function activate(context: ExtensionContext) {
+	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.doSuperSub', doSuperSub));
+	context.subscriptions.push(languages.registerCompletionItemProvider('*', new CompletionItems(), '.', ',', '\\'));
 }
+
 export function deactivate() {}
 
-function run() {
-	const editor = vscode.window.activeTextEditor;
+class CompletionItems {
+	private keys: string[];
+
+	constructor() { this.keys = Object.keys(symbols); }
+
+	public async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
+		const range = document.getWordRangeAtPosition(position);
+		console.log('provideCompletionItems range:', range);
+		
+		if (!range || range.start.character === 0) { return; }		
+		const target = new Range(range.start.translate(0, -1), range.end);
+		const word = document.getText(target);
+		console.log('word:', word);
+		if (word.length < 2 || !word.startsWith('\\')) { 
+			return; 
+		}
+		let matching = this.keys.filter((k: string) => k.startsWith(word));		
+		if (!matching.length) { return; }
+		// todo: remove
+		if (matching.length > 5) { matching = matching.slice(0, 5); } 				
+		return matching.map((key: string) => {
+			const item = new CompletionItem(key);
+			item.detail = symbols[key];
+			item.insertText = symbols[key];			
+			item.range = target;			
+			return item;
+		});
+	} 
+}
+
+function doSuperSub() {
+	const editor = window.activeTextEditor;
 	if (!editor) { return; }
 	editor.selections.forEach(s => processSelection(editor, s));	
 }
 
-function processSelection(editor: vscode.TextEditor, sel: vscode.Selection) {
+function processSelection(editor: TextEditor, sel: Selection) {
 	const document = editor.document;
-	const editrange = new vscode.Range(new vscode.Position(sel.start.line, 0), sel.start);
+	const editrange = new Range(new Position(sel.start.line, 0), sel.start);
 	const line = document.getText(editrange);	
 	const tokens = line.split('\\');
 	const last = tokens === null ? '' : tokens[tokens.length - 1];	
 	const changed = toSuperSub(last);	
 	
-	editor.edit(((editor: vscode.TextEditorEdit) => {		
+	
+	editor.edit(((editor: TextEditorEdit) => {		
 		if (changed) {
 			const newline = line.substring(0, line.lastIndexOf(last) - 1) + changed;
 			editor.replace(editrange, newline);
 		} else {
-			vscode.commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
+			commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
 		}
 	}));
 }

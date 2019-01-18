@@ -1,8 +1,8 @@
 { 
 	"name": "unicode-math-vscode",
 	"displayName": "Fast Unicode Math Characters",
-	"description": "Easy insertion of unicode math symbols ∑ ∀", 
-	"version": "0.1.2",	
+	"description": "Easy insertion of unicode math symbols in ∀ programming languages", 
+	"version": "0.1.3",	
 	"publisher": "GuidoTapia2",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",

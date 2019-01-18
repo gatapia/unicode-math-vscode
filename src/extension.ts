@@ -1,69 +1,95 @@
 import { TextDocument, Position, CancellationToken, CompletionContext, 
 	Range, CompletionItem, ExtensionContext, TextEditor, Selection, 
 	TextEditorEdit, commands, languages, window } from "vscode";
-import symbols from './symbols';
+import * as Symbols from './symbols';
 
-export function activate(context: ExtensionContext) {
-	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.doSuperSub', doSuperSub));
-	context.subscriptions.push(languages.registerCompletionItemProvider('*', new CompletionItems(), '.', ',', '\\'));
+export function activate(context: ExtensionContext) {	
+	const ctl = new UnicodeMaths(Symbols.default);
+	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit', () => ctl.commit()));
+	context.subscriptions.push(languages.registerCompletionItemProvider('*', ctl, '.', ','));
 }
 
 export function deactivate() {}
 
-class CompletionItems {
+class UnicodeMaths {
+	private DEBUG: boolean = false;
 	private keys: string[];
+	constructor(private codes: {[key:string]: string}) { this.keys = Object.keys(codes); }
 
-	constructor() { this.keys = Object.keys(symbols); }
-
-	public async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {
-		const range = document.getWordRangeAtPosition(position);
-		console.log('provideCompletionItems range:', range);
-		
-		if (!range || range.start.character === 0) { return; }		
-		const target = new Range(range.start.translate(0, -1), range.end);
-		const word = document.getText(target);
-		console.log('word:', word);
-		if (word.length < 2 || !word.startsWith('\\')) { 
-			return; 
-		}
-		let matching = this.keys.filter((k: string) => k.startsWith(word));		
-		if (!matching.length) { return; }
-		// todo: remove
-		if (matching.length > 5) { matching = matching.slice(0, 5); } 				
-		return matching.map((key: string) => {
+	public async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) {				
+		const [target, word] = this.evalPosition(document, position);
+		if (!target || !word) { return; }
+		let matches = this.keys.filter((k: string) => k.startsWith(word));		
+		this.debug(`word: ${word} has ${matches.length} matches`);
+		return matches.map((key: string) => {
 			const item = new CompletionItem(key);
-			item.detail = symbols[key];
-			item.insertText = symbols[key];			
+			item.detail = this.codes[key];
+			item.insertText = this.codes[key];			
 			item.range = target;			
 			return item;
 		});
-	} 
+	}	
+
+	public commit() {
+		if (!window.activeTextEditor) { return; }
+		this.debug('commit');		
+		window.activeTextEditor.selections.
+			forEach((selection: Selection) => this.commitAtPosition(selection.start));
+	}	
+
+	private commitAtPosition(position: Position) {
+		const editor: TextEditor = <TextEditor> window.activeTextEditor;		
+		const [target, word] = this.evalPosition(editor.document, position);
+		if (!target || !word) { return this.sendTab(); }
+		const changed = this.doWord(word);	
+		this.debug('word:', word, 'changing to:', changed);				
+		if (!changed) { return this.sendTab(); }		
+		editor.edit(((editor: TextEditorEdit) => editor.replace(target, changed)));
+	}
+
+	private sendTab() {
+		commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
+	}
+
+	private evalPosition(document: TextDocument, position: Position): any[] {
+		const range = document.getWordRangeAtPosition(position);		
+		this.debug('evalPosition has range:', !!range);
+		if (!range || range.start.character === 0) { return [null, null]; }
+		let target = new Range(range.start.translate(0, -1), range.end); // include initial '\'		
+		let word = document.getText(target);		
+		if (word.startsWith('^')) {
+			target = new Range(range.start.translate(0, -2), range.end); // include initial '\^'		
+			word = document.getText(target);		
+		}		
+		this.debug('evalPosition word:', word);
+		return !word.startsWith('\\') ? [null, null] : [target, word];
+	}
+
+	private doWord(word: string): string | null {
+		const startch = word.charAt(1);
+		if (this.isSubSupWord(word)) { return this.toSuperSub(word, startch === '_'); }		
+		return this.codes[word] || null; 
+	}
+
+	private isSubSupWord(word: string): boolean {
+		const startch = word.charAt(1);
+		return startch === '_' || startch === '^';
+	}
+
+	private toSuperSub(word: string, tosub: boolean): string | null {
+		const mapper = tosub ? subs : sups;
+		const target = word.substr(2);
+		const newstr = target.split('').map((c: string) => mapper[c] || c).join('');
+		return newstr === target ? null : newstr;
+	}
+
+	private debug(msg: any, ...optionals: any[]) {
+		if (!this.DEBUG) { return; }
+		console.log(msg, ...optionals);
+	}
 }
 
-function doSuperSub() {
-	const editor = window.activeTextEditor;
-	if (!editor) { return; }
-	editor.selections.forEach(s => processSelection(editor, s));	
-}
 
-function processSelection(editor: TextEditor, sel: Selection) {
-	const document = editor.document;
-	const editrange = new Range(new Position(sel.start.line, 0), sel.start);
-	const line = document.getText(editrange);	
-	const tokens = line.split('\\');
-	const last = tokens === null ? '' : tokens[tokens.length - 1];	
-	const changed = toSuperSub(last);	
-	
-	
-	editor.edit(((editor: TextEditorEdit) => {		
-		if (changed) {
-			const newline = line.substring(0, line.lastIndexOf(last) - 1) + changed;
-			editor.replace(editrange, newline);
-		} else {
-			commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
-		}
-	}));
-}
 
 // see: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
 const sups: {[key: string]: string} = {	"L": "ᴸ", "I": "ᴵ", "y": "ʸ", "9": "⁹", "0": "⁰", "δ": "ᵟ", "w": "ʷ", "4": "⁴", "l": "ˡ",
@@ -79,13 +105,3 @@ const subs: {[key: string]: string} = { "1": "₁", ")": "₎", "m": "ₘ", "4":
 	"o": "ₒ", "v": "ᵥ", "r": "ᵣ", "6": "₆", "(": "₍", "k": "ₖ", "x": "ₓ", "9": "₉", "=": "₌", "e": "ₑ", "l": "ₗ",
 	"i": "ᵢ", "ϕ": "ᵩ", "a": "ₐ", "p": "ₚ", "n": "ₙ", "θ": "₀"
 };
-
-function toSuperSub(txt: string): string | null {
-	if (!txt) { return null; }
-	const startch = txt.charAt(0);
-	if (startch !== '_' && startch !== '^') { return null; }
-	const mapper = startch === '_' ? subs : sups;
-	const target = txt.substr(1);
-	const newstr = target.split('').map((c: string) => mapper[c] || c).join('');
-	return newstr === target ? null : newstr;
-}

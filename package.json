@@ -2,7 +2,7 @@
 	"name": "unicode-math-vscode",
 	"displayName": "unicode-math-vscode",
 	"description": "Easy insertion of unicode math symbols ∑ ∀", 
-	"version": "0.0.1",	
+	"version": "0.1.1",	
 	"publisher": "GuidoTapia2",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",
@@ -29,14 +29,14 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "unicode-math-vscode.doSuperSub",
+				"command": "unicode-math-vscode.commit",
 				"title": "Run Unicode Math Line Parser",
 				"category": "Unicode Math"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "unicode-math-vscode.doSuperSub",
+				"command": "unicode-math-vscode.commit",
 				"key": "tab",
                 "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
 			}	

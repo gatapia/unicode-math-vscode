@@ -52,17 +52,20 @@ class UnicodeMaths {
 	}
 
 	private evalPosition(document: TextDocument, position: Position): any[] {
-		const range = document.getWordRangeAtPosition(position);		
-		this.debug('evalPosition has range:', !!range);
-		if (!range || range.start.character === 0) { return [null, null]; }
-		let target = new Range(range.start.translate(0, -1), range.end); // include initial '\'		
-		let word = document.getText(target);		
-		if (word.startsWith('^')) {
-			target = new Range(range.start.translate(0, -2), range.end); // include initial '\^'		
-			word = document.getText(target);		
-		}		
-		this.debug('evalPosition word:', word);
-		return !word.startsWith('\\') ? [null, null] : [target, word];
+		const [range, word] = this.getWordRangeAtPosition(document, position);		
+		this.debug('range:', !!range, 'word:', word)
+		return !word.startsWith('\\') ? [null, null] : [range, word];
+	}
+
+	// this implementation has a loser meaning of word (anything starting with \)
+	private getWordRangeAtPosition(document: TextDocument, position: Position): any[] {
+		const line = document.getText(new Range(new Position(position.line, 0), position));
+		const slash = line.lastIndexOf('\\');
+		const word = line.substr(slash).trim();
+		return [new Range(new Position(position.line, slash), position), word];
+		
+
+		return [];
 	}
 
 	private doWord(word: string): string | null {

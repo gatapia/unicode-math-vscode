@@ -33,8 +33,13 @@ class UnicodeMaths {
 	public commit() {
 		if (!window.activeTextEditor) { return; }
 		this.debug('commit');		
-		window.activeTextEditor.selections.
-			forEach((selection: Selection) => this.commitAtPosition(selection.start));
+		window.activeTextEditor.selections.forEach((selection: Selection) => {
+			try {
+				this.commitAtPosition(selection.start);
+			} catch (e) {
+				console.warn('error running commitAtPosition: ', e);
+			}
+		});
 	}	
 
 	private commitAtPosition(position: Position) {
@@ -51,21 +56,25 @@ class UnicodeMaths {
 		commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
 	}
 
-	private evalPosition(document: TextDocument, position: Position): any[] {
-		const [range, word] = this.getWordRangeAtPosition(document, position);		
-		this.debug('range:', !!range, 'word:', word)
-		return !word.startsWith('\\') ? [null, null] : [range, word];
+	private evalPosition(document: TextDocument, position: Position): any[] {		
+		if (position.character === 0) { return [null, null]; }
+		try {
+			const [range, word] = this.getWordRangeAtPosition(document, position);		
+			this.debug('range:', !!range, 'word:', word);
+			return !word || !word.startsWith('\\') ? [null, null] : [range, word];
+		} catch (e) {
+			return [null, null];	
+		}
 	}
 
 	// this implementation has a loser meaning of word (anything starting with \)
-	private getWordRangeAtPosition(document: TextDocument, position: Position): any[] {
-		const line = document.getText(new Range(new Position(position.line, 0), position));
+	private getWordRangeAtPosition(document: TextDocument, position: Position): any[] {				
+		const linestart = new Position(position.line, 0);
+		const lnrange = new Range(linestart, position);
+		const line = document.getText(lnrange);		
 		const slash = line.lastIndexOf('\\');
 		const word = line.substr(slash).trim();
 		return [new Range(new Position(position.line, slash), position), word];
-		
-
-		return [];
 	}
 
 	private doWord(word: string): string | null {
@@ -91,8 +100,6 @@ class UnicodeMaths {
 		console.log(msg, ...optionals);
 	}
 }
-
-
 
 // see: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
 const sups: {[key: string]: string} = {	"L": "ᴸ", "I": "ᴵ", "y": "ʸ", "9": "⁹", "0": "⁰", "δ": "ᵟ", "w": "ʷ", "4": "⁴", "l": "ˡ",

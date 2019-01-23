@@ -6,7 +6,7 @@ import * as Symbols from './symbols';
 export function activate(context: ExtensionContext) {	
 	const ctl = new UnicodeMaths(Symbols.default);
 	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit', () => ctl.commit()));
-	context.subscriptions.push(languages.registerCompletionItemProvider('*', ctl, '.', ','));
+	context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: 'all', language: '*' }, ctl, '.', ','));
 }
 
 export function deactivate() {}

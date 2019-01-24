@@ -53,7 +53,7 @@ class UnicodeMaths {
 	}
 
 	private sendTab() {
-		commands.executeCommand('type', { source: 'keyboard', text: '\t' });			
+		commands.executeCommand('tab');
 	}
 
 	private evalPosition(document: TextDocument, position: Position): any[] {		

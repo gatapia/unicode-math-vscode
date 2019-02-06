@@ -29,4 +29,3 @@ If a sequence of characters needs to be bolded or italicised then the following 
 
 # TODO
 - Auto complete hints appear to be broken
-- Do we need the Parser commands registered in the quick launch?

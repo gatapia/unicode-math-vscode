@@ -16,7 +16,7 @@ export function activate(context: ExtensionContext) {
 export function deactivate() {}
 
 class UnicodeMaths {
-	private DEBUG: boolean = true;
+	private DEBUG: boolean = false;
 	private keys: string[];
 	constructor(private codes: {[key:string]: string}) { this.keys = Object.keys(codes); }
 

@@ -2,7 +2,7 @@
 	"name": "unicode-math-vscode",
 	"displayName": "Fast Unicode Math Characters",
 	"description": "Easy insertion of unicode math symbols in ∀ programming languages", 
-	"version": "0.2.2",	
+	"version": "0.2.3",	
 	"publisher": "GuidoTapia2",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",
@@ -27,17 +27,7 @@
 	"activationEvents": ["onLanguage:abap","onLanguage:bat","onLanguage:bibtex","onLanguage:clojure","onLanguage:coffeescript","onLanguage:c","onLanguage:cpp","onLanguage:csharp","onLanguage:css","onLanguage:diff","onLanguage:dockerfile","onLanguage:fsharp","onLanguage:git-commit","onLanguage:git-rebase","onLanguage:go","onLanguage:groovy","onLanguage:handlebars","onLanguage:html","onLanguage:ini","onLanguage:java","onLanguage:javascript","onLanguage:javascriptreact","onLanguage:json","onLanguage:jsonc","onLanguage:latex","onLanguage:less","onLanguage:lua","onLanguage:makefile","onLanguage:markdown","onLanguage:objective-c","onLanguage:objective-cpp","onLanguage:perl","onLanguage:perl6","onLanguage:php","onLanguage:powershell","onLanguage:jade","onLanguage:python","onLanguage:r","onLanguage:razor","onLanguage:ruby","onLanguage:rust","onLanguage:scss","onLanguage:sass","onLanguage:shaderlab","onLanguage:shellscript","onLanguage:sql","onLanguage:swift","onLanguage:typescript","onLanguage:typescriptreact","onLanguage:tex","onLanguage:vb","onLanguage:xml","onLanguage:xsl","onLanguage:yaml","onLanguage:plaintext"],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "unicode-math-vscode.commit_tab",
-				"title": "Run Unicode Math Line Parser",
-				"category": "Unicode Math"
-			},
-			{
-				"command": "unicode-math-vscode.commit_space",
-				"title": "Run Unicode Math Line Parser",
-				"category": "Unicode Math"
-			},
+		"commands": [			
 			{
 				"command": "unicode-math-vscode.symbols_html",
 				"title": "Unicode Math Symbols Guide",

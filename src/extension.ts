@@ -1,13 +1,16 @@
 import { TextDocument, Position, CancellationToken, CompletionContext, 
 	Range, CompletionItem, ExtensionContext, TextEditor, 
-	TextEditorEdit, commands, languages, window, TextEditorRevealType } from "vscode";
+	TextEditorEdit, Uri, commands, languages, window } from "vscode";
 import * as Symbols from './symbols';
 
 export function activate(context: ExtensionContext) {	
 	const ctl = new UnicodeMaths(Symbols.default);
 	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_tab', () => ctl.commit('tab')));
 	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_space', () => ctl.commit('space')));
-	context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: 'all', language: '*' }, ctl, '.', ','));
+	context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: 'all', language: '*' }, ctl, '.', ','));		
+  context.subscriptions.push(commands.registerCommand('unicode-math-vscode.symbols_html', () => {
+      commands.executeCommand('vscode.open', Uri.parse('https://github.com/mvoidex/UnicodeMath/blob/master/table.md'));
+  }));
 }
 
 export function deactivate() {}

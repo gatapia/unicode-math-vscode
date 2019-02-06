@@ -13,7 +13,8 @@ All commands described below can be executed with either the [tab] or [space] ke
 ## Insert Symbols
 Snippets to automatically convert symbol names to their corresponding unicode character.  
 For instance typing '&#92;all' + [tab] will display '∀'. For a full list of supported symbols 
-see [list here](https://github.com/mvoidex/UnicodeMath/blob/master/table.md).
+see [list here](https://github.com/mvoidex/UnicodeMath/blob/master/table.md). This page has also
+been added to VS Code, so just press CTL + SHIFT + P and type 'Symbols' select "Unicode Math Symbols Guide" to see the full list.
 
 ## Superscript and Subscript
 To convert a portion of text to a superscript or subscript just type 
@@ -25,3 +26,7 @@ To insert a bold character the '&#92;mbf\<character\>'  can be used. For instanc
 
 If a sequence of characters needs to be bolded or italicised then the following sequences will work:
 '&#92;b:matrix' or '&#92;i:matrix' resulting in '𝐦𝐚𝐭𝐫𝐢𝐱' and '𝑚𝑎𝑡𝑟𝑖𝑥'.
+
+# TODO
+- Auto complete hints appear to be broken
+- Do we need the Parser commands registered in the quick launch?

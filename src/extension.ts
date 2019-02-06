@@ -1,6 +1,6 @@
 import { TextDocument, Position, CancellationToken, CompletionContext, 
 	Range, CompletionItem, ExtensionContext, TextEditor, 
-	TextEditorEdit, commands, languages, window } from "vscode";
+	TextEditorEdit, commands, languages, window, TextEditorRevealType } from "vscode";
 import * as Symbols from './symbols';
 
 export function activate(context: ExtensionContext) {	
@@ -52,7 +52,14 @@ class UnicodeMaths {
 		if (!target || !word) { return dokey(); }
 		const changed = this.doWord(word);
 		this.debug('word:', word, 'changing to:', changed);
-		if (changed) { editor.edit(((editor: TextEditorEdit) => editor.replace(target, changed))); }
+		if (changed) { 
+			editor.edit((editor: TextEditorEdit) => {
+				this.debug(`editor.replace [${target}] [${changed}]`, target);
+				editor.delete(target);
+				editor.insert(target.start, changed);
+				// editor.replace(target, changed);
+			}); 
+		}
 		// always propegate the space key, or propegate tab only if not used to insert a character
 		if (!changed || key === 'space') { return dokey(); }
 	}
@@ -75,24 +82,32 @@ class UnicodeMaths {
 		const line = document.getText(lnrange);		
 		const slash = line.lastIndexOf('\\');
 		const word = line.substr(slash).trim();
-		return [new Range(new Position(position.line, slash), position), word];
+		const start = new Position(position.line, slash);
+		const end = start.translate(undefined, word.length);
+		return [new Range(start, end), word];
 	}
 
 	private doWord(word: string): string | null {
 		const startch = word.charAt(1);
-		if (this.isSubSupWord(word)) { return this.toSuperSub(word, startch === '_'); }		
+		this.debug('doWord: ', word);
+		if (startch === '_') { return this.mapToSubSup(word, subs); }
+		else if (startch === '^') { return this.mapToSubSup(word, sups); }
+		else if (word.startsWith('\\i:')) { return this.mapToBoldIt(word, false); }
+		else if (word.startsWith('\\b:')) { return this.mapToBoldIt(word, true); }
 		return this.codes[word] || null; 
 	}
 
-	private isSubSupWord(word: string): boolean {
-		const startch = word.charAt(1);
-		return startch === '_' || startch === '^';
-	}
-
-	private toSuperSub(word: string, tosub: boolean): string | null {
-		const mapper = tosub ? subs : sups;
+	private mapToSubSup(word: string, mapper: {[key: string]: string}): string | null {		
 		const target = word.substr(2);
 		const newstr = target.split('').map((c: string) => mapper[c] || c).join('');
+		return newstr === target ? null : newstr;
+	}
+
+	private mapToBoldIt(word: string, bold: boolean): string | null {		
+		const target = word.substr(3);
+		const codeprfx = bold ? '\\mbf' : '\\mit';
+		const newstr = target.split('').map((c: string) => this.codes[codeprfx + c] || c).join('');
+		this.debug('mapToBoldIt word: ', word, 'bold:', bold, 'newstr:', newstr);
 		return newstr === target ? null : newstr;
 	}
 

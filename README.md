@@ -19,3 +19,9 @@ see [list here](https://github.com/mvoidex/UnicodeMath/blob/master/table.md).
 To convert a portion of text to a superscript or subscript just type 
 '&#92;_123' or '&#92;^123' + [tab].  This will display ₁₂₃ or ¹²³.  For a full list of supported
 subscript and superscript characters [see here](https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts).
+
+## Bold and Italics
+To insert a bold character the '&#92;mbf\<character\>'  can be used. For instance '&#92;mbfX' + [space] will display '𝐗 '. Correspondingly, italics can be inserted with the '&#92;mitX', resulting in '𝑋'.
+
+If a sequence of characters needs to be bolded or italicised then the following sequences will work:
+'&#92;b:matrix' or '&#92;i:matrix' resulting in '𝐦𝐚𝐭𝐫𝐢𝐱' and '𝑚𝑎𝑡𝑟𝑖𝑥'.

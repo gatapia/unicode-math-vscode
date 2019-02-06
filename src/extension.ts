@@ -3,13 +3,15 @@ import { TextDocument, Position, CancellationToken, CompletionContext,
     TextEditorEdit, Uri, commands, languages, window } from "vscode";
 import * as Symbols from './symbols';
 
+let SPACE_KEY: string = 'space';
+
 export function activate(context: ExtensionContext) {    
 	const ctl = new UnicodeMaths(Symbols.default);
 	
     context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: 'file', language: '*' }, ctl));
     
     context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_tab', () => ctl.commit('tab')));
-    context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_space', () => ctl.commit('space')));    
+    context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_space', () => ctl.commit(SPACE_KEY)));    
     context.subscriptions.push(commands.registerCommand('unicode-math-vscode.symbols_html', () => {
         commands.executeCommand('vscode.open', Uri.parse('https://github.com/mvoidex/UnicodeMath/blob/master/table.md'));
     }));
@@ -18,7 +20,7 @@ export function activate(context: ExtensionContext) {
 export function deactivate() {}
 
 class UnicodeMaths {
-    private DEBUG: boolean = false;
+	private DEBUG: boolean = false;	
     private keys: string[];
     constructor(private codes: {[key:string]: string}) { this.keys = Object.keys(codes); }
 
@@ -26,10 +28,10 @@ class UnicodeMaths {
         const [target, word] = this.evalPosition(document, position);
         if (!target || !word) { return; }
         let matches = this.keys.filter((k: string) => k.startsWith(word));        
-        this.debug(`word: ${word} has ${matches.length} matches`);
+        this.debug(`completion items - word: ${word} has ${matches.length} matches`);
         return matches.map((key: string) => {
             const item = new CompletionItem(key);
-            item.detail = this.codes[key];
+			item.detail = this.codes[key];
             item.insertText = this.codes[key];            
             item.range = target;            
             return item;
@@ -46,8 +48,8 @@ class UnicodeMaths {
     private commitAtPosition(position: Position, key: string) {        
         const editor: TextEditor = <TextEditor> window.activeTextEditor;
         const dokey = () => {
-            this.debug('commands.executeCommand: ' + key);
-            if (key === 'space') {
+            this.debug('dokey: ' + key);
+            if (key === SPACE_KEY) {
                 commands.executeCommand('type', { source: 'keyboard', text: ' ' });            
             } else {
                 commands.executeCommand(key);                
@@ -62,18 +64,18 @@ class UnicodeMaths {
                 this.debug(`editor.replace [${target}] [${changed}]`, target);
                 editor.delete(target);
                 editor.insert(target.start, changed);
-                // editor.replace(target, changed);
             }); 
         }
-        // always propegate the space key, or propegate tab only if not used to insert a character
-        if (!changed || key === 'space') { return dokey(); }
+		// always propegate the space key, or propegate tab 
+		//		only if not used to insert a character
+        if (!changed || key === SPACE_KEY) { return dokey(); }
     }
 
     private evalPosition(document: TextDocument, position: Position): any[] {        
         if (position.character === 0) { return [null, null]; }
         try {
             const [range, word] = this.getWordRangeAtPosition(document, position);        
-            this.debug('range:', !!range, 'word:', word);
+            this.debug('evalPosition - word:', word);
             return !word || !word.startsWith('\\') ? [null, null] : [range, word];
         } catch (e) {
             return [null, null];    

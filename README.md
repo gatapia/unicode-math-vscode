@@ -26,6 +26,3 @@ To insert a bold character the '&#92;mbf\<character\>'  can be used. For instanc
 
 If a sequence of characters needs to be bolded or italicised then the following sequences will work:
 '&#92;b:matrix' or '&#92;i:matrix' resulting in '𝐦𝐚𝐭𝐫𝐢𝐱' and '𝑚𝑎𝑡𝑟𝑖𝑥'.
-
-# TODO
-- Auto complete hints appear to be broken

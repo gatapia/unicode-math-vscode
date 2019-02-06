@@ -2,7 +2,7 @@
 	"name": "unicode-math-vscode",
 	"displayName": "Fast Unicode Math Characters",
 	"description": "Easy insertion of unicode math symbols in ∀ programming languages", 
-	"version": "0.1.8",	
+	"version": "0.1.9",	
 	"publisher": "GuidoTapia2",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",
@@ -29,17 +29,27 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "unicode-math-vscode.commit",
+				"command": "unicode-math-vscode.commit_tab",
+				"title": "Run Unicode Math Line Parser",
+				"category": "Unicode Math"
+			},
+			{
+				"command": "unicode-math-vscode.commit_space",
 				"title": "Run Unicode Math Line Parser",
 				"category": "Unicode Math"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "unicode-math-vscode.commit",
+				"command": "unicode-math-vscode.commit_tab",
 				"key": "tab",
                 "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
-			}	
+			},
+			{
+				"command": "unicode-math-vscode.commit_space",
+				"key": "space",
+                "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
+			}
 		]
 	},
 	"scripts": {

@@ -1,18 +1,19 @@
 import { TextDocument, Position, CancellationToken, CompletionContext, 
-	Range, CompletionItem, ExtensionContext, TextEditor, Selection, 
+	Range, CompletionItem, ExtensionContext, TextEditor, 
 	TextEditorEdit, commands, languages, window } from "vscode";
 import * as Symbols from './symbols';
 
 export function activate(context: ExtensionContext) {	
 	const ctl = new UnicodeMaths(Symbols.default);
-	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit', () => ctl.commit()));
+	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_tab', () => ctl.commit('tab')));
+	context.subscriptions.push(commands.registerCommand('unicode-math-vscode.commit_space', () => ctl.commit('space')));
 	context.subscriptions.push(languages.registerCompletionItemProvider({ scheme: 'all', language: '*' }, ctl, '.', ','));
 }
 
 export function deactivate() {}
 
 class UnicodeMaths {
-	private DEBUG: boolean = false;
+	private DEBUG: boolean = true;
 	private keys: string[];
 	constructor(private codes: {[key:string]: string}) { this.keys = Object.keys(codes); }
 
@@ -30,30 +31,30 @@ class UnicodeMaths {
 		});
 	}	
 
-	public commit() {
-		if (!window.activeTextEditor) { return; }
-		this.debug('commit');		
-		window.activeTextEditor.selections.forEach((selection: Selection) => {
-			try {
-				this.commitAtPosition(selection.start);
-			} catch (e) {
-				console.warn('error running commitAtPosition: ', e);
-			}
-		});
+	public commit(key: string) {
+		if (!key || !window.activeTextEditor || !window.activeTextEditor.selection) { return; }				
+		this.debug('commit - key: ' + key);
+		// only single selection supported, I dont see how multiple selection support is worth the testing
+		this.commitAtPosition(window.activeTextEditor.selection.start, key);
 	}	
 
-	private commitAtPosition(position: Position) {
-		const editor: TextEditor = <TextEditor> window.activeTextEditor;		
+	private commitAtPosition(position: Position, key: string) {		
+		const editor: TextEditor = <TextEditor> window.activeTextEditor;
+		const dokey = () => {
+			this.debug('commands.executeCommand: ' + key);
+			if (key === 'space') {
+				commands.executeCommand('type', { source: 'keyboard', text: ' ' });			
+			} else {
+				commands.executeCommand(key);				
+			}
+		};
 		const [target, word] = this.evalPosition(editor.document, position);
-		if (!target || !word) { return this.sendTab(); }
-		const changed = this.doWord(word);	
-		this.debug('word:', word, 'changing to:', changed);				
-		if (!changed) { return this.sendTab(); }		
-		editor.edit(((editor: TextEditorEdit) => editor.replace(target, changed)));
-	}
-
-	private sendTab() {
-		commands.executeCommand('tab');
+		if (!target || !word) { return dokey(); }
+		const changed = this.doWord(word);
+		this.debug('word:', word, 'changing to:', changed);
+		if (changed) { editor.edit(((editor: TextEditorEdit) => editor.replace(target, changed))); }
+		// always propegate the space key, or propegate tab only if not used to insert a character
+		if (!changed || key === 'space') { return dokey(); }
 	}
 
 	private evalPosition(document: TextDocument, position: Position): any[] {		

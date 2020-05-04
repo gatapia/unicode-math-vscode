@@ -1,8 +1,8 @@
-{ 
+{
 	"name": "unicode-math-vscode",
 	"displayName": "Fast Unicode Math Characters",
-	"description": "Easy insertion of unicode math symbols in ∀ programming languages", 
-	"version": "0.2.6",	
+	"description": "Easy insertion of unicode math symbols in ∀ programming languages",
+	"version": "0.2.6",
 	"publisher": "GuidoTapia2",
 	"license": "MIT",
 	"homepage": "https://picnet.com.au/artificial-intelligence/",
@@ -15,7 +15,7 @@
 		"vscode": "^1.30.0"
 	},
 	"categories": [
-		"Snippets" 
+		"Snippets"
 	],
 	"keywords": [
 		"unicode",
@@ -24,10 +24,66 @@
 		"shortcuts",
 		"snippets"
 	],
-	"activationEvents": ["onLanguage:abap","onLanguage:bat","onLanguage:bibtex","onLanguage:clojure","onLanguage:coffeescript","onLanguage:c","onLanguage:cpp","onLanguage:csharp","onLanguage:css","onLanguage:diff","onLanguage:dockerfile","onLanguage:fsharp","onLanguage:git-commit","onLanguage:git-rebase","onLanguage:go","onLanguage:groovy","onLanguage:handlebars","onLanguage:html","onLanguage:ini","onLanguage:java","onLanguage:javascript","onLanguage:javascriptreact","onLanguage:json","onLanguage:jsonc","onLanguage:latex","onLanguage:less","onLanguage:lua","onLanguage:makefile","onLanguage:markdown","onLanguage:objective-c","onLanguage:objective-cpp","onLanguage:perl","onLanguage:perl6","onLanguage:php","onLanguage:powershell","onLanguage:jade","onLanguage:python","onLanguage:r","onLanguage:razor","onLanguage:ruby","onLanguage:rust","onLanguage:scss","onLanguage:sass","onLanguage:shaderlab","onLanguage:shellscript","onLanguage:sql","onLanguage:swift","onLanguage:typescript","onLanguage:typescriptreact","onLanguage:tex","onLanguage:vb","onLanguage:xml","onLanguage:xsl","onLanguage:yaml","onLanguage:plaintext"],
+	"activationEvents": [
+		"onLanguage:abap",
+		"onLanguage:bat",
+		"onLanguage:bibtex",
+		"onLanguage:clojure",
+		"onLanguage:coffeescript",
+		"onLanguage:c",
+		"onLanguage:cpp",
+		"onLanguage:csharp",
+		"onLanguage:css",
+		"onLanguage:diff",
+		"onLanguage:dockerfile",
+		"onLanguage:fsharp",
+		"onLanguage:git-commit",
+		"onLanguage:git-rebase",
+		"onLanguage:go",
+		"onLanguage:groovy",
+		"onLanguage:handlebars",
+		"onLanguage:html",
+		"onLanguage:ini",
+		"onLanguage:java",
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact",
+		"onLanguage:json",
+		"onLanguage:jsonc",
+		"onLanguage:latex",
+		"onLanguage:less",
+		"onLanguage:lua",
+		"onLanguage:makefile",
+		"onLanguage:markdown",
+		"onLanguage:objective-c",
+		"onLanguage:objective-cpp",
+		"onLanguage:perl",
+		"onLanguage:perl6",
+		"onLanguage:php",
+		"onLanguage:powershell",
+		"onLanguage:jade",
+		"onLanguage:python",
+		"onLanguage:r",
+		"onLanguage:razor",
+		"onLanguage:ruby",
+		"onLanguage:rust",
+		"onLanguage:scss",
+		"onLanguage:sass",
+		"onLanguage:shaderlab",
+		"onLanguage:shellscript",
+		"onLanguage:sql",
+		"onLanguage:swift",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact",
+		"onLanguage:tex",
+		"onLanguage:vb",
+		"onLanguage:xml",
+		"onLanguage:xsl",
+		"onLanguage:yaml",
+		"onLanguage:plaintext"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [			
+		"commands": [
 			{
 				"command": "unicode-math-vscode.symbols_html",
 				"title": "Unicode Math Symbols Guide",
@@ -38,14 +94,24 @@
 			{
 				"command": "unicode-math-vscode.commit_tab",
 				"key": "tab",
-                "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
+				"when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
 			},
 			{
 				"command": "unicode-math-vscode.commit_space",
 				"key": "space",
-                "when": "editorTextFocus && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
+				"when": "editorTextFocus && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Unicode Input",
+			"properties": {
+				"unicode-math-vscode.leader": {
+					"type": "string",
+					"default": "\\",
+					"description": "The string used to initiate unicode input"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",

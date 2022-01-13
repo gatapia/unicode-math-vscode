@@ -101,7 +101,8 @@ class UnicodeMaths {
         else if (startch === '^') { return this.mapToSubSup(word, sups); }
         else if (word.startsWith('\\i:')) { return this.mapToBoldIt(word, false); }
         else if (word.startsWith('\\b:')) { return this.mapToBoldIt(word, true); }
-        return this.codes[word] || null; 
+        else if (word.startsWith('\\') && word.includes(':')) { return this.mapTo(word); }
+        return this.codes[word] || null;
     }
 
     private mapToSubSup(word: string, mapper: {[key: string]: string}): string | null {        
@@ -116,6 +117,17 @@ class UnicodeMaths {
         const newstr = target.split('').map((c: string) => this.codes[codeprfx + c] || c).join('');
         this.debug('mapToBoldIt word: ', word, 'bold:', bold, 'newstr:', newstr);
         return newstr === target ? null : newstr;
+    }
+
+    private mapTo(word: string): string | null {
+        const modifier = word.split(':');
+        if (modifier.length === 2) {
+            const mod    = modifier[0];
+            const newstr = modifier[1];
+            const modstr = newstr.split('').map((c: string) => this.codes[mod + c] || c).join('');
+            return modstr === word ? null : modstr;
+        }
+        return null;
     }
 
     private debug(msg: any, ...optionals: any[]) {

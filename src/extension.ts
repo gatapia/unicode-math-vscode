@@ -101,7 +101,7 @@ class UnicodeMaths {
         else if (startch === '^') { return this.mapToSubSup(word, sups); }
         else if (word.startsWith('\\i:')) { return this.mapToBoldIt(word, false); }
         else if (word.startsWith('\\b:')) { return this.mapToBoldIt(word, true); }
-        else if (word.startsWith('\\') && word.includes(':')) { return this.mapTo(word); }
+        else if (!word.startsWith('\\:') && word.startsWith('\\') && word.includes(':')) { return this.mapTo(word); }
         return this.codes[word] || null;
     }
 

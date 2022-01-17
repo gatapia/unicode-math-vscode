@@ -19,7 +19,7 @@ select "Unicode Math Symbols Guide" to see the full list of supported symbols.
 
 ## Superscript and Subscript
 To convert a portion of text to a superscript or subscript just type 
-'&#92;_123' or '&#92;^123' + [tab].  This will display ₁₂₃ or ¹²³.  For a full list of supported
+'&#92;\_123' or '&#92;^123' + [tab].  This will display ₁₂₃ or ¹²³.  For a full list of supported
 subscript and superscript characters [see here](https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts).
 
 ## Bold and Italics

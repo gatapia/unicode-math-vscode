@@ -125,7 +125,7 @@ class UnicodeMaths {
             const mod    = modifier[0];
             const newstr = modifier[1];
             const modstr = newstr.split('').map((c: string) => this.codes[mod + c] || c).join('');
-            return modstr === newStr ? null : modstr;
+            return modstr === word ? null : modstr;
         }
         return null;
     }

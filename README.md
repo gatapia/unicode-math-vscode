@@ -1,8 +1,11 @@
 # unicode-math-vscode README
 [Download Url](https://marketplace.visualstudio.com/items?itemName=GuidoTapia2.unicode-math-vscode)
 
+## This project is no longer mantained but I am happy to merge/publish pull requests.
+
 Note: This project is a port from the great [UnicodeMath](https://github.com/mvoidex/UnicodeMath) 
     sublime text plugin by [Alexandr Ruchkin](https://github.com/mvoidex). See original documentation for more details.
+
 
 # Supported Features
 

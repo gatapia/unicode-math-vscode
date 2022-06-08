@@ -38,7 +38,7 @@
 			{
 				"command": "unicode-math-vscode.commit_tab",
 				"key": "tab",
-                "when": "editorTextFocus && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
+                "when": "editorTextFocus && !inlineSuggestionVisible && !suggestWidgetVisible && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !editorTabMovesFocus && !editorReadonly"
 			},
 			{
 				"command": "unicode-math-vscode.commit_space",
